@@ -221,5 +221,5 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
 # 连接数据库（不需要配置数据源）,connect()函数创建并返回一个 Connection 对象
-# 这里"\\127.0.0.1\ftp\test.mdb"要换成数据库在服务器中的路径
-DB_CON = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=\\127.0.0.1\ftp\信息.mdb')
+# 这里DB=""要换成数据库在服务器中的路径
+DB_CON = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=/www/ftp/信息.mdb')
