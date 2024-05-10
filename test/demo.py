@@ -10,7 +10,24 @@ print('`````````````` goods ``````````````')
 for table_info in crsr.tables(tableType='TABLE'):
     print(table_info.table_name)
 
-l = crsr.execute("SELECT * from `仓库信息`")
+crsr.execute("SELECT * from `仓库信息`")
+# 获取l的键值对
+# 获取列名
+columns = [column[0] for column in crsr.description]
+
+# 获取所有行并转换为字典
+rows = []
+for row in crsr.fetchall():
+    row_dict = dict(zip(columns, row))
+    rows.append(row_dict)
+
+# 打印结果
+for row in rows:
+    print(row)
+
+# 关闭游标和连接
+crsr.close()
+cnxn.close()
 
 """
 以下是demo
