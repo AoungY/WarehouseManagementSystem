@@ -1,0 +1,16 @@
+pyodbc
+Django==3.2.23
+django-cors-headers==4.3.1
+django-filter==23.5
+django-redis==5.4.0
+django-user-agents==0.4.0
+djangorestframework==3.14.0
+ipython
+PyJWT==1.7.1
+redis==5.0.1
+urllib3==2.2.1
+user-agents==2.2.0
+Pillow
+requests
+cryptography
+djangorestframework-simplejwt
