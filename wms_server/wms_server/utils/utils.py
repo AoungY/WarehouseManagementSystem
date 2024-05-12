@@ -1,6 +1,5 @@
+import pyodbc
 from django.conf import settings
-
-db_con = settings.DB_CON
 
 chinese_to_english = {
     "用户名": "username",
@@ -57,8 +56,18 @@ def fetchall(cursor):
 
 class SQL:
     def __init__(self):
-        self.con = db_con
+        self.con = pyodbc.connect(settings.DB_CON)
         self.cursor = self.con.cursor()
+
+    # 连接数据库
+    def connect(self):
+        self.con = pyodbc.connect(settings.DB_CON)
+        self.cursor = self.con.cursor()
+
+    # 断开数据库连接
+    def disconnect(self):
+        self.cursor.close()
+        self.con.close()
 
     def get_user(self, user_name, password):
         """
@@ -67,8 +76,10 @@ class SQL:
         :param password: 密码
         :return:
         """
+        self.connect()  # 连接数据库
         self.cursor.execute("SELECT * FROM 用户信息表 WHERE 用户名 = ? AND 用户密码 = ?", (user_name, password))
         user = fetchone(self.cursor)
+        self.disconnect()  # 关闭数据库连接
         return user
 
     def get_card(self, card_number):
@@ -77,11 +88,14 @@ class SQL:
         :param card_number: 卡号
         :return:
         """
+        self.connect()  # 连接数据库
         self.cursor.execute("SELECT * FROM 仓库信息 WHERE 卡号 = ?", (card_number,))
         card = fetchone(self.cursor)
+        self.disconnect()  # 关闭数据库连接
         return card
 
     def update_card(self, data):
+        self.connect()  # 连接数据库
         # 构建更新语句
         update_sql = "UPDATE `仓库信息` SET "
         update_values = []
@@ -92,22 +106,26 @@ class SQL:
         update_sql = update_sql[:-2]
         update_sql += " WHERE 卡号 = ?"
         update_values.append(data['card_number'])
-        print(update_sql,update_values)
+        print(update_sql, update_values)
         # 执行更新操作
         try:
             self.cursor.execute(update_sql, update_values)
-            self.con.commit() # 提交事务
+            self.con.commit()  # 提交事务
+            self.disconnect()  # 关闭数据库连接
             return True
         except Exception as e:
+            self.disconnect()  # 关闭数据库连接
             print(e)
             return False
 
-    def delete_card(self,card_number):
+    def delete_card(self, card_number):
         """
         删除卡信息
         :param card_number: 卡号
         :return:
         """
+        self.connect()  # 连接数据库
         self.cursor.execute("DELETE FROM 仓库信息 WHERE 卡号 = ?", (card_number,))
         self.con.commit()
+        self.disconnect()  # 关闭数据库连接
         return True

@@ -1,6 +1,7 @@
 from django.conf import settings
+import pyodbc
 
-db_con = settings.DB_CON
+db_con = pyodbc.connect(settings.db_connect_str)
 
 chinese_to_english = {
     "用户名": "username",
